@@ -1,0 +1,230 @@
+! mk_trophy.mac
+!
+! cc by-sa: creative commons attribution Share Alike
+!
+! 5/10/2011 Tony Cervantes
+!
+FINISH  
+/CLEAR,START
+/prep7
+!
+/GRA,POWER
+/GST,ON
+/PLO,INFO,3
+/GRO,CURL,ON
+/CPLANE,1   
+/REPLOT,RESIZE  
+WPSTYLE,,,,,,,,0
+/triad,lbot 
+!
+*afun,rad
+pi=cos(-1)
+*afun,deg
+!
+! ---------------------------------
+! some parameters
+!
+! unscaled parameters
+t_wall=1.0
+!
+! set reference origin
+x_off=0
+y_off=0
+!
+r_base = 15
+h_base = 1
+r_top = 1.25*r_base
+h_top = 70
+!
+! ---------------------------------
+!
+! store some #'s
+!
+*get,khigh,kp,,num,maxd
+*do,i,1,20
+  k%i%=i+khigh
+*enddo
+!
+*get,lhigh,line,,num,maxd
+*do,i,1,20
+  LL%i%=i+lhigh
+*enddo
+!
+! ---------------------------------
+!
+!  make the basic outline
+!
+csys,0
+wpcsys,-1,0
+!
+wpoffs,x_off,y_off
+!!!wprota,90,90
+wprota,,90
+! rectangular system at center
+CSWPLA,11,0,1,1,
+!
+csys,11
+!
+k,k1,0,0,0
+k,k2,r_base,0
+! line LL1
+lstr,k1,k2
+!
+k,k3,r_base,h_base
+! line LL2
+lstr,k2,k3
+!
+k,k4,0.30*r_base,0.15*h_top
+k,k5,0.30*r_base,0.25*h_top
+k,k6,0.75*r_top ,0.50*h_top
+k,k7,0.95*r_top ,0.75*h_top
+k,k8,1.00*r_top ,1.00*h_top
+!
+! line LL3
+bsplin,k3,k4,k5,k6,k7,k8
+!
+! line LL4
+lgen,2,LL3,,,-t_wall
+!
+! line LL5
+lstr,k8,k10
+!
+csys,0
+wpcsys,-1,0
+wpoffs,,,0.20*h_top
+wprota,-90
+! rectangular system at center
+CSWPLA,11,0,1,1,
+!
+lsbw,LL4,,delete
+ldel,6,,,1
+!
+k,12,0
+lstr,11,12
+lstr,12,1
+!
+al,1,2,3,5,7,4,6
+vrotat,1,,,,,,1,k12,90
+!
+! make the handle
+!
+r_handle = 0.05*h_top
+rr_handle = 0.15*h_top
+h_handle = 0.75*h_top
+!
+csys,0
+wpcsys,-1,0
+wpoffs,0.95*r_top,,h_handle
+wprota,90,90
+! rectangular system at center
+CSWPLA,11,0,1,1,
+!
+! make circular part of the handle
+!
+cyl4,0,rr_handle,r_handle,-90,,90
+*get,a1,area,,num,maxd
+!
+*get,khigh,kp,,num,maxd
+*do,i,1,20
+  k%i%=i+khigh
+*enddo
+!
+k,k1,0,0,0
+k,k2,10
+!
+th_handle = 145
+vrotat,a1,,,,,,k1,k2,th_handle
+!
+wprota,,th_handle
+wpoffs,,rr_handle
+! rectangular system at center
+CSWPLA,11,0,1,1,
+!
+vext,17,,,0,0,20
+!
+FLST,2,2,6,ORDE,2   
+FITEM,2,2   
+FITEM,2,4   
+VSBA,P51X,       4  
+!
+FLST,2,2,6,ORDE,2   
+FITEM,2,5   
+FITEM,2,8   
+VDELE,P51X, , ,1
+vadd,all
+!
+KSLL,U  
+kdele,all
+!
+allsel
+nummrg,all
+numcmp,all
+!
+csys,0
+asel,u,loc,x,-.001,.001
+asel,u,loc,y,-.001,.001
+ET,1,SHELL43
+ESIZE,2,0,  
+MSHAPE,0,2D 
+MSHKEY,0
+amesh,all
+ENORM,     695  
+
+
+
+
+
+
+
+
+
+
+! ===========================================================
+! ===========================================================
+
+
+!
+test=0
+*if,test,eq,-1,then
+
+
+
+
+*endif
+
+!
+! Window Settings
+/VIEW,1, 0.75000    , 0.43301    , 0.50000    
+/FOC, 1,  13.304    ,  4.7696    ,  22.500    
+/DIST,1,  24.349    
+/ANG, 1, -106.10    ,ZS
+/TYPE,1, 6
+/EDG, 1, 0,  45.000    
+/CONT,1,  9,AUTO
+!
+/gresu,nice,gsav
+!
+!WPSTYLE,,,,,,,,1
+WPSTYLE,,,,,,,,0
+!
+/PNUM,KP,1  
+/PNUM,LINE,1
+/PNUM,AREA,1
+/PNUM,VOLU,1
+/PNUM,NODE,0
+/PNUM,TABN,0
+/PNUM,SVAL,0
+/NUMBER,1   
+/FACET,FINE 
+/GTYPE,1,KEYP,1 
+/GTYPE,1,LINE,1 
+/GTYPE,1,AREA,0 
+/GTYPE,1,VOLU,0 
+/GTYPE,1,NODE,0 
+/GTYPE,1,ELEM,0 
+/GCMD,1 
+
+eplot
+/replot
+
+
